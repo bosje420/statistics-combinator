@@ -21,7 +21,7 @@ local precisions = {{flow_precisions.five_seconds, 0.0833}, {flow_precisions.one
 local function write_output_statistics(control, force, time_step, iostat)
     local params = control.parameters
     for i,signalID in pairs(params) do
-        if signalID.signal.name ~= nil and signalID.signal.type == "item" then
+        if signalID.signal.name ~= nil and (signalID.signal.type == "item" or signalID.signal.type == "fluid") then
             signalID.count = math.floor(0.5+(time_step[2]*force.item_production_statistics.get_flow_count{name=signalID.signal.name, input=iostat, precision_index=time_step[1], count=false}))
             params[i] = signalID
         end
@@ -65,11 +65,7 @@ local function cleanup(entity)
     if entity and entity.unit_number then
         local state = global.state[entity.unit_number]
         if state then
-            if state.net and state.net.valid then state.net.destroy() end
-            if state.sat and state.sat.valid then state.sat.destroy() end
             global.state[entity.unit_number] = nil
-            state.net = nil
-            state.sat = nil
         end
     end
 end
@@ -77,9 +73,10 @@ end
 local function update(tick)
     if tick %  precision_ticks > 0 then return end
     local invalid = {}
+    local size = 1
     for id, state in pairs(global.state) do
         if not (state.entity and state.entity.valid) then
-            table.insert(invalid, id)
+            invalid[size] = id
         elseif state.tick < tick and state.control.enabled then
             write(state, tick)
         end
@@ -88,9 +85,9 @@ local function update(tick)
 end
 local function make_gui(player)
     local anchor = {gui=defines.relative_gui_type.constant_combinator_gui, position=defines.relative_gui_position.right, names={"production-combinator", "consumption-combinator"}}
-    local frame = player.gui.relative.add{type="frame", anchor=anchor}
+    local frame = player.gui.relative.add{name="stat-comb-gui",type="frame", anchor=anchor}
     frame.add{type="label", caption="Precision"}
-    frame.add{type="drop-down", items={"5s", "1m", "10m", "1h", "10h", "50h"}}
+    frame.add{name="stat-comb-dropdown",type="drop-down", items={"5s", "1m", "10m", "1h", "10h", "50h"}}
 
 end
 local function init()
@@ -144,14 +141,18 @@ script.on_event(defines.events.on_player_created, function (event)
 
 end)
 
-script.on_event(defines.events.on_gui_opened, function(event)
-    if event.gui_type == defines.gui_type.entity and (event.entity.name == "production-combinator" or event.entity.name == "consumption-combinator") then
-        global.last_clicked = event.entity.unit_number
+script.on_event(defines.events.on_gui_opened, function (event)
+    local player = game.get_player(event.player_index)
+    local gui = player.gui.relative["stat-comb-gui"]
+    if gui ~= nil and gui["stat-comb-dropdown"] ~= nil and player.opened ~= nil and (player.opened.name == "production-combinator" or player.opened.name == "consumption-combinator") then
+        gui["stat-comb-dropdown"].selected_index = (global.state[player.opened.unit_number].time_step[1] + 1)
     end
 end)
 script.on_event(defines.events.on_gui_selection_state_changed, function (event)
-    local player = game.get_player(event.player_index)
-    global.state[global.last_clicked].time_step = precisions[event.element.selected_index]
+    if event.element.name == "stat-comb-dropdown" then
+        local player = game.get_player(event.player_index)
+        global.state[player.opened.unit_number].time_step = precisions[event.element.selected_index]
+    end
 end)
 
 script.on_event(events.entity.added, function (event)

@@ -70,10 +70,10 @@ local icons = {
         {icon = steam.icon, icon_size = steam.icon_size, tint = color.yellow},
     },
     combinator = {
-        {icon = cc.icon, icon_size = cc.icon_size, tint = color.green},
+        {icon = "__statistics-combinator__/graphics/production-combinator-icon.png", icon_size = cc.icon_size},
     },
     combinator2 = {
-        {icon = cc.icon, icon_size = cc.icon_size, tint = color.blue},
+        {icon = "__statistics-combinator__/graphics/consumption-combinator-icon.png", icon_size = cc.icon_size},
     },
 }
 
@@ -81,13 +81,96 @@ local entity = table.deepcopy(data.raw["constant-combinator"]["constant-combinat
 entity.name = "production-combinator"
 entity.minable.result = "production-combinator"
 entity.item_slot_count = 5
-entity.sprites.tint = color.green
+entity.sprites =
+{
+    layers =
+      {
+        {
+          filename = "__statistics-combinator__/graphics/production-combinator.png",
+          width = 58,
+          height = 52,
+          frame_count = 1,
+          shift = util.by_pixel(0, 5),
+          hr_version =
+          {
+            scale = 0.5,
+            filename = "__statistics-combinator__/graphics/hr-production-combinator.png",
+            width = 114,
+            height = 102,
+            frame_count = 1,
+            shift = util.by_pixel(0, 5)
+          }
+        },
+        {
+          filename = "__base__/graphics/entity/combinator/constant-combinator-shadow.png",
+          width = 50,
+          height = 34,
+          frame_count = 1,
+          shift = util.by_pixel(9, 6),
+          draw_as_shadow = true,
+          hr_version =
+          {
+            scale = 0.5,
+            filename = "__base__/graphics/entity/combinator/hr-constant-combinator-shadow.png",
+            width = 98,
+            height = 66,
+            frame_count = 1,
+            shift = util.by_pixel(8.5, 5.5),
+            draw_as_shadow = true
+          }
+        }
+      }
+}
+
 data:extend{entity}
 local entity = table.deepcopy(data.raw["constant-combinator"]["constant-combinator"])
 entity.name = "consumption-combinator"
 entity.minable.result = "consumption-combinator"
 entity.item_slot_count = 5
-entity.sprites.tint = color.blue
+entity.sprites =
+{
+    layers =
+      {
+        {
+          filename = "__statistics-combinator__/graphics/consumption-combinator.png",
+          width = 58,
+          height = 52,
+          frame_count = 1,
+          shift = util.by_pixel(0, 5),
+          hr_version =
+          {
+            scale = 0.5,
+            filename = "__statistics-combinator__/graphics/hr-consumption-combinator.png",
+            width = 114,
+            height = 102,
+            frame_count = 1,
+            shift = util.by_pixel(0, 5)
+          }
+        },
+        {
+          filename = "__base__/graphics/entity/combinator/constant-combinator-shadow.png",
+          width = 50,
+          height = 34,
+          frame_count = 1,
+          shift = util.by_pixel(9, 6),
+          draw_as_shadow = true,
+          hr_version =
+          {
+            scale = 0.5,
+            filename = "__base__/graphics/entity/combinator/hr-constant-combinator-shadow.png",
+            width = 98,
+            height = 66,
+            frame_count = 1,
+            shift = util.by_pixel(8.5, 5.5),
+            draw_as_shadow = true
+          }
+        }
+      }
+}
+
+
+
+
 data:extend{entity}
 
 data:extend{
@@ -148,8 +231,7 @@ data:extend{
     {   type = "technology",
         name = "statistics-combinator",
         prerequisites = {
-            "circuit-network",
-            "electric-energy-distribution-1",
+            "advanced-electronics",
             "optics",
         },
         icon = "__statistics-combinator__/graphics/technology.png",

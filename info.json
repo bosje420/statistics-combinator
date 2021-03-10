@@ -1,11 +1,11 @@
 {
     "name": "statistics-combinator",
     "version": "0.1.0",
-    "title": "Production Statistics Combinator",
+    "title": "Statistics Combinators",
     "author": "Bosje",
     "factorio_version": "1.1",
     "description": "Output production and consumption statistics (The values from the \"P\" menu) for a given item to a signal",
     "dependencies": [
-      "base >= 1.0.0"
+      "base >= 1.1.26"
     ]
 }

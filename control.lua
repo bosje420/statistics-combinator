@@ -85,9 +85,11 @@ local function update(tick)
 end
 local function make_gui(player)
     local anchor = {gui=defines.relative_gui_type.constant_combinator_gui, position=defines.relative_gui_position.right, names={"production-combinator", "consumption-combinator"}}
-    local frame = player.gui.relative.add{name="stat-comb-gui",type="frame", anchor=anchor}
-    frame.add{type="label", caption="Precision"}
-    frame.add{name="stat-comb-dropdown",type="drop-down", items={"5s", "1m", "10m", "1h", "10h", "50h"}}
+    if player.gui.relative["stat-comb-gui"] == nil then
+        local frame = player.gui.relative.add{name="stat-comb-gui",type="frame", anchor=anchor}
+        frame.add{type="label", caption="Precision"}
+        frame.add{name="stat-comb-dropdown",type="drop-down", items={"5s", "1m", "10m", "1h", "10h", "50h"}}
+    end
 
 end
 local function init()

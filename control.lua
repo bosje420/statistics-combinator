@@ -146,8 +146,14 @@ end)
 script.on_event(defines.events.on_gui_opened, function (event)
     local player = game.get_player(event.player_index)
     local gui = player.gui.relative["stat-comb-gui"]
-    if gui ~= nil and gui["stat-comb-dropdown"] ~= nil and player.opened ~= nil and (player.opened.name == "production-combinator" or player.opened.name == "consumption-combinator") then
-        gui["stat-comb-dropdown"].selected_index = (global.state[player.opened.unit_number].time_step[1] + 1)
+    if event.gui_type ~= nil and event.gui_type == defines.gui_type.entity then
+        if player.opened ~= nil then
+            if gui ~= nil and gui["stat-comb-dropdown"] ~= nil  and player.opened["name"] ~= nil  then
+                if (player.opened.name == "production-combinator" or player.opened.name == "consumption-combinator") then
+                    gui["stat-comb-dropdown"].selected_index = (global.state[player.opened.unit_number].time_step[1] + 1)
+                end
+            end
+        end
     end
 end)
 script.on_event(defines.events.on_gui_selection_state_changed, function (event)

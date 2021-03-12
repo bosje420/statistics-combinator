@@ -202,7 +202,7 @@ data:extend{
 
     {   type = "recipe",
         name = "production-combinator",
-        energy_required = 30,
+        energy_required = 1,
         ingredients = {
             {"red-wire", 2},
             {"constant-combinator", 2},
@@ -214,7 +214,7 @@ data:extend{
 
     {   type = "recipe",
         name = "consumption-combinator",
-        energy_required = 30,
+        energy_required = 1,
         ingredients = {
             {"green-wire", 2},
             {"constant-combinator", 2},

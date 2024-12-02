@@ -80,7 +80,7 @@ local icons = {
 local entity = table.deepcopy(data.raw["constant-combinator"]["constant-combinator"])
 entity.name = "production-combinator"
 entity.minable.result = "production-combinator"
-entity.item_slot_count = 5
+entity.item_slot_count = 20
 entity.sprites =
 {
     layers =
@@ -126,7 +126,7 @@ data:extend{entity}
 local entity = table.deepcopy(data.raw["constant-combinator"]["constant-combinator"])
 entity.name = "consumption-combinator"
 entity.minable.result = "consumption-combinator"
-entity.item_slot_count = 5
+entity.item_slot_count = 20
 entity.sprites =
 {
     layers =

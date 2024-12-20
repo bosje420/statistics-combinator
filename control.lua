@@ -21,8 +21,14 @@ local precisions = {{flow_precisions.five_seconds, 0.0833}, {flow_precisions.one
 local function write_output_statistics(control, force, time_step, iostat)
     local params = control.parameters
     for i,signalID in pairs(params) do
-        if signalID.signal.name ~= nil and (signalID.signal.type == "item" or signalID.signal.type == "fluid") then
-            signalID.count = math.floor(0.5+(time_step[2]*force.item_production_statistics.get_flow_count{name=signalID.signal.name, input=iostat, precision_index=time_step[1], count=false}))
+        if signalID.signal.name ~= nil then
+            local count = 0
+            if signalID.signal.type == "item" then
+                count = force.item_production_statistics.get_flow_count{name=signalID.signal.name, input=iostat, precision_index=time_step[1], count=false}
+            elseif signalID.signal.type == "fluid" then
+                count = force.fluid_production_statistics.get_flow_count{name=signalID.signal.name, input=iostat, precision_index=time_step[1], count=false}
+            end
+            signalID.count = math.floor(0.5+(time_step[2]*count))
             params[i] = signalID
         end
     end
